@@ -1,0 +1,28 @@
+{
+  "name": "vatsim-airport-traffic",
+  "version": "1.0.0",
+  "description": "TypeScript CLI for displaying VATSIM airport traffic.",
+  "scripts": {
+    "test": "vitest",
+    "test:run": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simpson2/Vatsim-airport-traffic.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/simpson2/Vatsim-airport-traffic/issues"
+  },
+  "homepage": "https://github.com/simpson2/Vatsim-airport-traffic#readme",
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.10"
+  },
+  "private": true
+}
