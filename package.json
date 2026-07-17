@@ -5,7 +5,10 @@
   "scripts": {
     "test": "vitest",
     "test:run": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json",
+    "prestart": "npm run build",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
