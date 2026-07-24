@@ -17,6 +17,11 @@ it('includes a matching departure', async () => {
                 },
             },
         ],
+        controllers: [
+            { callsign: 'EIDW_GND' },
+            { callsign: 'EIDW_APP' },
+            { callsign: 'EGLL_TWR' },
+        ],
     };
 
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
@@ -38,5 +43,6 @@ it('includes a matching departure', async () => {
             },
         ],
         arrivals: [],
+        controllers: ['EIDW_GND', 'EIDW_APP'],
     });
 });

@@ -1,11 +1,11 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { fetchVatsimPilots } from '../src/fetchVatsimData.js';
+import { fetchVatsimData } from '../src/fetchVatsimData.js';
 
 afterEach(() => {
     vi.restoreAllMocks();
 });
 
-it('fetches and transforms VATSIM pilots', async () => {
+it('fetches and transforms VATSIM data', async () => {
     const vatsimResponse = {
         pilots: [
             {
@@ -20,6 +20,10 @@ it('fetches and transforms VATSIM pilots', async () => {
                 flight_plan: null,
             },
         ],
+        controllers: [
+            { callsign: 'EIDW_GND' },
+            { callsign: 'EGLL_TWR' },
+        ],
     };
 
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
@@ -28,21 +32,24 @@ it('fetches and transforms VATSIM pilots', async () => {
         }),
     );
 
-    const actual = await fetchVatsimPilots();
+    const actual = await fetchVatsimData();
 
-    expect(actual).toEqual([
-        {
-            callsign: 'EIN123',
-            flight_plan: {
-                departure: 'EIDW',
-                destination: 'EGLL',
+    expect(actual).toEqual({
+        pilots: [
+            {
+                callsign: 'EIN123',
+                flight_plan: {
+                    departure: 'EIDW',
+                    destination: 'EGLL',
+                },
             },
-        },
-        {
-            callsign: 'EIN456',
-            flight_plan: null,
-        },
-    ]);
+            {
+                callsign: 'EIN456',
+                flight_plan: null,
+            },
+        ],
+        controllerCallsigns: ['EIDW_GND', 'EGLL_TWR'],
+    });
 });
 
 it('throws when VATSIM request fails', async () => {
@@ -55,7 +62,7 @@ it('throws when VATSIM request fails', async () => {
         }),
     );
 
-    const actual = fetchVatsimPilots();
+    const actual = fetchVatsimData();
 
     await expect(actual).rejects.toThrow(expectedError);
 });

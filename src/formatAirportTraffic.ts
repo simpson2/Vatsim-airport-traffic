@@ -1,11 +1,13 @@
-import type { AirportTraffic } from './filterFlights.js';
+import type { AirportTraffic } from './types.js';
 
 export function formatAirportTraffic(traffic: AirportTraffic): string {
 
     const departureLines: string[] = [];
     const arrivalLines: string[] = [];
+    const controllerLines: string[] = [];
     let departureString = 'Departures:\nNone';
     let arrivalString = 'Arrivals:\nNone';
+    let controllerString = 'Controllers:None';
 
     for (const pilot of traffic.departures) {
         if (pilot.flight_plan === null) continue;
@@ -31,6 +33,11 @@ export function formatAirportTraffic(traffic: AirportTraffic): string {
 
         arrivalLines.push(linesString);
     };
+    for (const controller of traffic.controllers) {
+        if (controller === null) continue;
+
+        controllerLines.push(controller);
+    };
 
 
     if (departureLines.length !== 0) {
@@ -39,7 +46,10 @@ export function formatAirportTraffic(traffic: AirportTraffic): string {
     if (arrivalLines.length !== 0) {
         arrivalString = 'Arrivals:\n'+arrivalLines.join('\n');
     };
+    if (controllerLines.length !== 0) {
+        controllerString = 'Controllers:'+controllerLines.join(', ');
+    };
 
-    const finalString = departureString+'\n\n'+arrivalString;
+    const finalString = controllerString+'\n\n'+departureString+'\n\n'+arrivalString;
     return finalString;
 };
