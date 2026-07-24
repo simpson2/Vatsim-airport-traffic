@@ -1,9 +1,18 @@
-import { fetchVatsimPilots } from './fetchVatsimData.js';
-import { filterFlightsByAirport, type AirportTraffic } from './filterFlights.js';
+import { fetchVatsimData } from './fetchVatsimData.js';
+import { filterControllersByAirport } from './filterControllers.js';
+import { filterFlightsByAirport } from './filterFlights.js';
+import type { AirportTraffic } from './types.js';
 
 export async function getAirportTraffic(airport: string): Promise<AirportTraffic> {
-    const vatsimData = await fetchVatsimPilots();
-    const airportTraffic = filterFlightsByAirport(vatsimData, airport);
+    const vatsimData = await fetchVatsimData();
 
-    return airportTraffic;
+    const airportFlights = filterFlightsByAirport(vatsimData.pilots, airport);
+    const controllers = filterControllersByAirport(vatsimData.controllerCallsigns, airport);
+
+
+    return {
+        departures: airportFlights.departures,
+        arrivals: airportFlights.arrivals,
+        controllers,
+    };
 };

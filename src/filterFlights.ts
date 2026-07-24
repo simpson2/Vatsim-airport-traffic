@@ -1,6 +1,6 @@
 import type { Pilot } from './types.js';
 
-export type AirportTraffic = {
+type AirportFlights = {
     departures: Pilot[];
     arrivals: Pilot[];
 };
@@ -8,7 +8,7 @@ export type AirportTraffic = {
 export function filterFlightsByAirport(
     pilots: Pilot[],
     airport: string,
-): AirportTraffic {
+): AirportFlights {
     const normalisedAirport = airport.trim().toUpperCase(); // Normalize the airport code to uppercase for consistent comparison
 
     const departures = pilots.filter(

@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
-import { type AirportTraffic } from '../src/filterFlights.js';
 import { formatAirportTraffic } from '../src/formatAirportTraffic.js';
+import { type AirportTraffic } from '../src/types.js';
 
 it('formats a departure only', () => {
     const testTraffic: AirportTraffic = {
@@ -14,11 +14,15 @@ it('formats a departure only', () => {
             },
         ],
         arrivals: [],
+        controllers: [
+            'EIDW_GND',
+            'EIDW_TWR'
+        ],
     };
 
     const actual = formatAirportTraffic(testTraffic);
 
-    expect(actual).toEqual('Departures:\nEIN123 EIDW -> KLAX\n\nArrivals:\nNone');
+    expect(actual).toEqual('Controllers:EIDW_GND, EIDW_TWR\n\nDepartures:\nEIN123 EIDW -> KLAX\n\nArrivals:\nNone');
 });
 
 it('formats an arrival only', () => {
@@ -33,11 +37,12 @@ it('formats an arrival only', () => {
                 },
             },
         ],
+        controllers: ['EIDW_TWR'],
     };
 
     const actual = formatAirportTraffic(testTraffic);
 
-    expect(actual).toEqual('Departures:\nNone\n\nArrivals:\nEIN123 EIDW -> KLAX');
+    expect(actual).toEqual('Controllers:EIDW_TWR\n\nDepartures:\nNone\n\nArrivals:\nEIN123 EIDW -> KLAX');
 });
 
 it('formats both departure and arrival', () => {
@@ -60,20 +65,25 @@ it('formats both departure and arrival', () => {
                 },
             },
         ],
+        controllers: [
+            'EIDW_GND',
+            'EIDW_TWR'
+        ],
     };
 
     const actual = formatAirportTraffic(testTraffic);
 
-    expect(actual).toEqual('Departures:\nEIN123 EIDW -> KLAX\n\nArrivals:\nEIN456 KLAX -> EIDW');
+    expect(actual).toEqual('Controllers:EIDW_GND, EIDW_TWR\n\nDepartures:\nEIN123 EIDW -> KLAX\n\nArrivals:\nEIN456 KLAX -> EIDW');
 });
 
 it('formats no traffic', () => {
     const testTraffic: AirportTraffic = {
         departures: [],
         arrivals: [],
+        controllers: [],
     };
 
     const actual = formatAirportTraffic(testTraffic);
 
-    expect(actual).toEqual('Departures:\nNone\n\nArrivals:\nNone');
+    expect(actual).toEqual('Controllers:None\n\nDepartures:\nNone\n\nArrivals:\nNone');
 });

@@ -1,4 +1,4 @@
-import type { Pilot } from './types.js';
+import type { Pilot, VatsimData } from './types.js';
 
 type VatsimPilot = {
     callsign: string;
@@ -7,10 +7,14 @@ type VatsimPilot = {
         arrival: string;
     } | null;
 };
-
-type VatsimData = {
-    pilots: VatsimPilot[];
+type VatsimController = {
+    callsign: string;
 };
+type VatsimResponse = {
+    pilots: VatsimPilot[];
+    controllers: VatsimController[];
+};
+
 
 function toPilot(vatsimPilot: VatsimPilot): Pilot {
     const callsign = vatsimPilot.callsign;
@@ -30,7 +34,7 @@ function toPilot(vatsimPilot: VatsimPilot): Pilot {
 
 const VATSIM_DATA_URL = 'https://data.vatsim.net/v3/vatsim-data.json';
 
-export async function fetchVatsimPilots(): Promise<Pilot[]> {
+export async function fetchVatsimData(): Promise<VatsimData> {
     const response = await fetch(VATSIM_DATA_URL);
 
     if (!response.ok) {
@@ -40,7 +44,12 @@ export async function fetchVatsimPilots(): Promise<Pilot[]> {
     }
 
     const rawData = await response.json();
-    const data = rawData as VatsimData;
+    const data = rawData as VatsimResponse;
 
-    return data.pilots.map(toPilot);
-}
+    return {
+        pilots: data.pilots.map(toPilot),
+        controllerCallsigns: data.controllers.map(
+            (controller) => controller.callsign
+        ),
+    };
+};
